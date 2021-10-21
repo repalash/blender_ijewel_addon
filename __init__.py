@@ -67,6 +67,7 @@ class MATERIAL_PT_ijewel_diamond(MaterialButtonsPanel, bpy.types.Panel):
         layout.use_property_decorate = False  # No animation.
         layout.active = prop.isDiamond
         layout.prop(prop, 'dispersion')
+        layout.prop(prop, 'refractiveIndex')
         layout.prop(prop, 'boostFactors')
         layout.prop(prop, 'envMapIntensity')
 
@@ -75,6 +76,7 @@ class MATERIAL_PT_ijewel_diamond(MaterialButtonsPanel, bpy.types.Panel):
 class IJewelDiamondMaterialPropertyGroup(bpy.types.PropertyGroup):
     isDiamond: bpy.props.BoolProperty(name="")
     dispersion: bpy.props.FloatProperty(name="Dispersion", min=0, max=5, step=0.01)
+    refractiveIndex: bpy.props.FloatProperty(name="Refractive Index", min=0, max=5, step=0.01)
     envMapIntensity: bpy.props.FloatProperty(name="Env Intensity", min=0, max=10, step=0.1, default=1)
     boostFactors: bpy.props.FloatVectorProperty(name="Boost Factors", min=0, max=5, step=0.1, size=3, default=(1,1,1))
 
@@ -155,7 +157,13 @@ class glTF2ExportUserExtension:
 
         if self.properties.enabled and blender_material.ijewel_diamond.isDiamond:
 
-            extension_data = {'isDiamond': True, 'dispersion': blender_material.ijewel_diamond.dispersion, 'boostFactors': tuple(blender_material.ijewel_diamond.boostFactors), 'envMapIntensity': blender_material.ijewel_diamond.envMapIntensity}
+            extension_data = {
+                'isDiamond': True,
+                'dispersion': blender_material.ijewel_diamond.dispersion,
+                'refractiveIndex': blender_material.ijewel_diamond.refractiveIndex,
+                'boostFactors': tuple(blender_material.ijewel_diamond.boostFactors),
+                'envMapIntensity': blender_material.ijewel_diamond.envMapIntensity
+            }
 
             gltf2_material.extensions[self.properties.extension_name] = self.Extension(
                 name=self.properties.extension_name,
