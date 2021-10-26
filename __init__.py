@@ -71,14 +71,16 @@ class MATERIAL_PT_ijewel_diamond(MaterialButtonsPanel, bpy.types.Panel):
         layout.prop(prop, 'boostFactors')
         layout.prop(prop, 'envMapIntensity')
         layout.prop(prop, 'cacheKey')
+        layout.prop(prop, 'normalMapRes')
 
 
 
 class IJewelDiamondMaterialPropertyGroup(bpy.types.PropertyGroup):
-    isDiamond: bpy.props.BoolProperty(name="")
-    cacheKey: bpy.props.StringProperty(name="Cache Key", maxlen=20)
-    dispersion: bpy.props.FloatProperty(name="Dispersion", min=0, max=5, step=0.01)
-    refractiveIndex: bpy.props.FloatProperty(name="Refractive Index", min=0, max=5, step=0.01)
+    isDiamond: bpy.props.BoolProperty(name="", default=False)
+    cacheKey: bpy.props.StringProperty(name="Cache Key", maxlen=20, default="")
+    normalMapRes: bpy.props.FloatProperty(name="Normal Map Res", min=128, max=2048, step=128, default=512)
+    dispersion: bpy.props.FloatProperty(name="Dispersion", min=0, max=5, step=0.001, default=0.012)
+    refractiveIndex: bpy.props.FloatProperty(name="Refractive Index", min=0, max=5, step=0.01, default=2.4)
     envMapIntensity: bpy.props.FloatProperty(name="Env Intensity", min=0, max=10, step=0.1, default=1)
     boostFactors: bpy.props.FloatVectorProperty(name="Boost Factors", min=0, max=5, step=0.1, size=3, default=(1,1,1))
 
@@ -162,6 +164,7 @@ class glTF2ExportUserExtension:
             extension_data = {
                 'isDiamond': True,
                 'cacheKey': blender_material.ijewel_diamond.cacheKey,
+                'normalMapRes': blender_material.ijewel_diamond.normalMapRes,
                 'dispersion': blender_material.ijewel_diamond.dispersion,
                 'refractiveIndex': blender_material.ijewel_diamond.refractiveIndex,
                 'boostFactors': tuple(blender_material.ijewel_diamond.boostFactors),
